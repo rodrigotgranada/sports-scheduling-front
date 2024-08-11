@@ -3,15 +3,21 @@ import Cookies from 'js-cookie';
 
 // Função de login
 export const loginUser = async (email: string, password: string) => {
-  const response = await axios.post('/api/auth/login', { email, password });
-  
-  // O token JWT será automaticamente armazenado como cookie no backend
-  if (response.data.message === 'Login successful') {
-    return true;
-  } else {
+  try {
+    const response = await axios.post('http://localhost:8000/auth/login', { email, password }, { withCredentials: true });
+    
+    if (response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error('Erro ao fazer login:', error);
     return false;
   }
 };
+
+
 
 // Função de registro
 export const registerUser = async (formData: any) => {

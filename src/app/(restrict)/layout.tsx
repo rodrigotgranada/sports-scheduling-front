@@ -1,6 +1,7 @@
-import { ReactNode } from 'react';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+"use client";
+
+import { ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'; // Atualize para next/navigation
 import { verifyAuth } from '@/utils/auth';
 
 interface Props {

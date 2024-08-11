@@ -1,10 +1,10 @@
-"use client"; // Isso faz com que o arquivo seja interpretado como um Client Component
+"use client";
 
-import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { loginUser } from '@/utils/auth';
 
-const LoginPage = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -14,15 +14,16 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
 
-    try {
-      const success = await loginUser(email, password);
-      if (success) {
-        router.push('/user'); // Redireciona para a página de perfil do usuário após login
-      } else {
-        setError('Credenciais inválidas. Por favor, tente novamente.');
-      }
-    } catch (err) {
-      setError('Erro ao tentar realizar o login. Por favor, tente novamente.');
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result?.error) {
+      setError('Credenciais inválidas. Por favor, tente novamente.');
+    } else {
+      router.push('/user');
     }
   };
 
@@ -65,6 +66,4 @@ const LoginPage = () => {
       </form>
     </div>
   );
-};
-
-export default LoginPage;
+}
